@@ -1,0 +1,23 @@
+{
+  "name": "desafio-mb-web-larodiel",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
+    "server": "nodemon ./server/app.js"
+  },
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "express": "^4.21.2",
+    "helmet": "^8.0.0",
+    "nodemon": "^3.1.9",
+    "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^5.2.1",
+    "vite": "^6.0.5"
+  }
+}
