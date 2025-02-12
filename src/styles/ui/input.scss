@@ -1,0 +1,46 @@
+@use '../../styles/variables';
+
+.mb-input {
+  label {
+    display: block;
+    font: 400 16px/140% variables.$ff-sans;
+    letter-spacing: 0.25px;
+    text-align: left;
+  }
+
+  input {
+    width: 100%;
+    border: 1px solid variables.$black;
+    border-radius: 8px;
+    padding: 10px 16px;
+    outline: none;
+    min-width: 180px;
+    font-size: 16px;
+    -webkit-appearance: none;
+    appearance: none;
+    box-sizing: border-box;
+
+    &:invalid {
+      border-color: variables.$error-color;
+    }
+  }
+
+  &-error {
+    &-message {
+      color: variables.$error-color;
+      font-size: 12px;
+      margin-top: variables.$gap-xs;
+      margin-bottom: 0;
+    }
+
+    input {
+      border-color: variables.$error-color;
+    }
+  }
+}
+
+@starting-style {
+  input:invalid {
+    border-color: variables.$black;
+  }
+}

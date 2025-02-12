@@ -1,0 +1,60 @@
+@use './styles/variables';
+
+:root {
+  font-family: variables.$ff-sans;
+  line-height: 1.5;
+  font-weight: 400;
+}
+
+#app {
+  width: 100%;
+}
+
+body {
+  margin: 0;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+.mb-main-container {
+  max-width: 1200px;
+  padding-left: variables.$gap-sm;
+  padding-right: variables.$gap-sm;
+  margin-left: auto;
+  margin-right: auto;
+  width: 100%;
+}
+
+.logo {
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+  width: fit-content;
+
+  img {
+    display: block;
+    margin: 0 auto;
+    height: 6em;
+    padding: variables.$gap-sm;
+    will-change: filter;
+    transition: filter 300ms;
+
+    &:hover {
+      filter: drop-shadow(0 0 2em variables.$main-brand-color);
+    }
+  }
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}

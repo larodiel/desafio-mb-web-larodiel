@@ -1,5 +1,6 @@
 <script setup>
 import {computed} from 'vue';
+import '../../styles/ui/button.scss';
 
 const props = defineProps({
   variant: {
@@ -40,29 +41,3 @@ const classes = computed(() => [
     <slot></slot>
   </button>
 </template>
-
-<style scoped>
-.mb-button {
-  flex: 1;
-  border: 1px solid var(--brand);
-  color: var(--brand);
-  background-color: transparent;
-  display: inline-block;
-  padding: 0.5rem 1rem;
-  border-radius: 0.25rem;
-  font: 500 0.875rem var(--ff-sans);
-  text-transform: uppercase;
-  cursor: pointer;
-  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
-
-  &.mb-button-solid {
-    background-color: var(--brand);
-    color: var(--white);
-  }
-
-  &:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
-  }
-}
-</style>

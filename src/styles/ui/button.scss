@@ -1,0 +1,25 @@
+@use '../../styles/variables';
+
+.mb-button {
+  flex: 1;
+  border: 1px solid variables.$main-brand-color;
+  color: variables.$main-brand-color;
+  background-color: transparent;
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.25rem;
+  font: 500 0.875rem variables.$ff-sans;
+  text-transform: uppercase;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out, color 0.2s ease-in-out;
+
+  &.mb-button-solid {
+    background-color: variables.$main-brand-color;
+    color: variables.$white;
+  }
+
+  &:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+}

@@ -1,8 +1,9 @@
 <script setup>
 import {ref, computed, onUnmounted, watch} from 'vue';
 import {maskPatterns, applyMask, removeMask} from '../../../utils/maskPatterns';
+import '../../styles/ui/input.scss';
 
-const isValid = ref(true);
+const isValid = ref(false);
 const debounceTimeout = ref(null);
 const inputRef = ref(null);
 const rawValue = ref(null);
@@ -40,27 +41,22 @@ const props = defineProps({
     default: null,
     validator: (value) => ['cpf', 'cnpj', 'date', 'phone'].includes(value),
   },
-  error: {
-    type: Boolean,
-    default: false,
-  },
   errorMessage: {
     type: String,
     default: '',
   },
 });
 
-const hasError = computed(() => {
-  return props.error || !isValid.value;
-});
-
 const errorMessages = computed(() => {
-  return props.errorMessage || validationErrorMessage;
+  const errorMessage = props.errorMessage || validationErrorMessage.value;
+  if (!errorMessage) return '';
+  return errorMessage.trim();
 });
 
 const inputClasses = computed(() => ({
-  'input-container': true,
-  'input-error': !isValid.value,
+  'mb-input': true,
+  'mb-input-container': true,
+  'mb-input-error': errorMessages.value !== '',
 }));
 
 const currentMask = computed(() => {
@@ -161,51 +157,8 @@ defineExpose({
       :name="name"
       @keydown.enter.prevent="handleEnter"
       autocomplete="off" />
-    <p class="error-message" v-if="hasError" role="alert">
+    <p class="mb-input-error-message" v-if="errorMessages !== ''" role="alert">
       {{ errorMessages }}
     </p>
   </div>
 </template>
-
-<style scoped>
-.error-message {
-  color: var(--error-color);
-  font-size: 12px;
-  margin-top: var(--gap-xs);
-}
-
-label {
-  display: block;
-  font: 400 16px/140% 'IBM Plex Sans', Arial, sans-serif;
-  letter-spacing: 0.25px;
-  text-align: left;
-}
-
-.input-error {
-  input {
-    border-color: var(--error-color);
-  }
-}
-
-input {
-  width: 100%;
-  border: 1px solid var(--black);
-  border-radius: 8px;
-  padding: 10px 16px;
-  outline: none;
-  min-width: 180px;
-  font-size: 16px;
-  -webkit-appearance: none;
-  appearance: none;
-  box-sizing: border-box;
-
-  &:invalid {
-    border-color: var(--error-color);
-  }
-}
-@starting-style {
-  input:invalid {
-    border-color: var(--black);
-  }
-}
-</style>

@@ -1,9 +1,9 @@
 <script setup>
 import {computed, reactive, ref} from 'vue';
 import {validationRules} from '../../../utils/signUpValidation';
+import '../../styles/signup/signup-form.scss';
 import Alert from '../ui/Alert.vue';
 import Button from '../ui/Button.vue';
-import Container from '../ui/Container.vue';
 import FormStep from './FormStep.vue';
 
 const emit = defineEmits(['onRegistrationError']);
@@ -210,24 +210,24 @@ const resetFormErrors = () => {
 };
 </script>
 <template>
-  <div>
+  <div class="mb-signup-container">
     <div v-if="!isRegistrationComplete">
-      <span
-        >Etapa <span class="mb-signup-form-current-step">{{ currentStep }}</span> de {{ totalSteps }}</span
+      <span class="mb-signup-step"
+        >Etapa <span class="mb-signup-step-current">{{ currentStep }}</span> de {{ totalSteps }}</span
       >
       <form @submit.prevent="handleSubmit" class="mb-signup-form">
         <h2>{{ stepsForm[currentStep].title }}</h2>
         <!-- Percorrer os steps -->
         <div v-for="(step, key) in stepsForm" :key="step">
           <!-- Se o passo atual for igual a key do step exibe os campos -->
-          <Container display="flex" gap="xs" direction="col" v-if="currentStep === +key">
+          <div class="mb-signup-step-form-container" v-if="currentStep === +key">
             <FormStep
               :form-state="formState"
               :form-errors="formErrors"
               :step-fields="stepsForm[currentStep].fields"
               @enter="handleInputEnter" />
             <!-- Exibe os campos de pessoa física ou jurídica no passo 1 -->
-            <Container display="flex" gap="xs" v-if="currentStep === 1">
+            <div class="mb-signup-type-input" v-if="currentStep === 1">
               <span>
                 <input
                   id="pf"
@@ -248,32 +248,26 @@ const resetFormErrors = () => {
                   @change="handleSingUpTypeChange" />
                 <label for="pj">Pessoa Jurídica</label>
               </span>
-            </Container>
-          </Container>
+            </div>
+          </div>
         </div>
 
         <!-- Review step -->
-        <Container
-          display="flex"
-          gap="xs"
-          direction="col"
-          v-for="(step, key) in stepsForm"
-          :key="step"
-          v-if="isLastStep">
+        <div class="mb-signup-step-form-container" v-for="(step, key) in stepsForm" :key="step" v-if="isLastStep">
           <!-- Percorrer os campos do step atual -->
           <FormStep
             :form-state="formState"
             :form-errors="formErrors"
             :step-fields="stepsForm[key].fields"
             @enter="handleInputEnter" />
-        </Container>
+        </div>
 
         <!-- Fim dos passos -->
-        <Container display="flex" center marginTop="md">
+        <div class="mb-signup-navigation">
           <Button v-if="!isFirstStep" type="button" variant="outline" @click="handlePrevStepNav">Anterior</Button>
           <Button v-if="!isLastStep" type="button" variant="solid" @click="handleNextStepNav">Continuar</Button>
           <Button v-else type="submit" variant="solid">Cadastrar</Button>
-        </Container>
+        </div>
       </form>
     </div>
     <div v-else>
@@ -285,9 +279,3 @@ const resetFormErrors = () => {
     <div class="alert-description">Por favor, verifique se os dados foram preenchidos corretamente.</div>
   </Alert>
 </template>
-
-<style scoped>
-.mb-signup-form-current-step {
-  color: var(--brand);
-}
-</style>

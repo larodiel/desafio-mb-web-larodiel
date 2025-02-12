@@ -1,12 +1,13 @@
 <script setup>
 import SignupForm from './components/signup/SignupForm.vue';
-import Container from './components/ui/Container.vue';
-import Logo from './components/ui/Logo.vue';
 </script>
 
 <template>
-  <Container size="xs" center bleed="md">
-    <Logo />
+  <div class="mb-main-container">
+    <a href="/" target="_blank" class="logo">
+      <img src="/logo.svg" alt="Logo - Mercado Bitcoin" />
+      <span class="sr-only">Mercado Bitcoin</span>
+    </a>
     <SignupForm />
-  </Container>
+  </div>
 </template>

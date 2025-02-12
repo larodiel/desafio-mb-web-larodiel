@@ -1,0 +1,40 @@
+@use '../../styles/variables';
+
+.mb-signup {
+  &-container {
+    display: flex;
+    flex-direction: column;
+    gap: variables.$gap-sm;
+    max-width: 360px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  &-step {
+    display: flex;
+    gap: variables.$gap-xs;
+
+    &-current {
+      color: variables.$main-brand-color;
+    }
+  }
+
+  &-type-input {
+    display: flex;
+    gap: variables.$gap-xs;
+  }
+
+  &-step-form {
+    &-container {
+      display: flex;
+      flex-direction: column;
+      gap: variables.$gap-xs;
+    }
+  }
+
+  &-navigation {
+    display: flex;
+    gap: variables.$gap-xs;
+    margin-top: variables.$gap-sm;
+  }
+}

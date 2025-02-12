@@ -19,7 +19,6 @@
 2. Instalar o [Nodemon](https://nodemon.io/)
 3. Instalar plugins do Express
    - [Helmet](https://helmetjs.github.io/)
-   - [Body Parser](https://github.com/expressjs/body-parser)
 4. Criar o endpoint `GET` para exibir o formulário `/registration`
 5. Criar o endpoint `POST` para receber os dados do formulário `/registration`
 6. Criar arquivo de validação para validar os campos do formulário, as funções devem ser reutilizáveis e as mesmas regras se aplicam no backend e no frontend

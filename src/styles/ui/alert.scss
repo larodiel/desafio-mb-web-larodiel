@@ -1,0 +1,52 @@
+@use '../../styles/variables';
+@use 'sass:color';
+
+.alert {
+  padding: variables.$gap-sm;
+  border-radius: 5px;
+  margin: variables.$gap-sm 0;
+  position: relative;
+  font-size: variables.$gap-sm;
+
+  &-title {
+    margin-top: 0;
+    font-size: 1.3rem;
+    line-height: 1;
+  }
+
+  &.alert-success {
+    background-color: variables.$success-color;
+    color: variables.$white;
+    border: 1px solid variables.$success-color;
+  }
+
+  &.alert-error {
+    background-color: variables.$error-color;
+    color: variables.$white;
+    border: 1px solid variables.$error-color;
+  }
+
+  &.alert-warning {
+    background-color: variables.$warning-color;
+    color: color.mix(variables.$warning-color, black, 50%);
+    border: 1px solid variables.$warning-color;
+  }
+
+  &.alert-info {
+    background-color: variables.$info-color;
+    color: variables.$white;
+    border: 1px solid variables.$info-color;
+  }
+
+  .close-btn {
+    position: absolute;
+    top: 50%;
+    right: 10px;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    font-size: 1.2rem;
+    cursor: pointer;
+    color: inherit;
+  }
+}
