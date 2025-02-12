@@ -1,9 +1,10 @@
-import bodyParser from 'body-parser';
 import express from 'express';
 import helmet from 'helmet';
 import path from 'path';
+import { fileURLToPath } from 'url';
 import { signUpFields, validationRules } from '../utils/signUpValidation.js';
-const __dirname = import.meta.dirname;
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use((req, res, next) => {
@@ -18,7 +19,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.use('/', express.static(path.join(__dirname, '../dist')));
 
 app.use(helmet());
-app.use(bodyParser.json());
+app.use(express.json());
 
 app.get('/registration', (req, res) => {
   res.sendFile(path.join(__dirname, '../dist/index.html'));
