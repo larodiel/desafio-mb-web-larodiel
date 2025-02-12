@@ -7,12 +7,14 @@ import Button from '../ui/Button.vue';
 import FormStep from './FormStep.vue';
 
 const emit = defineEmits(['onRegistrationError']);
-const totalSteps = 4;
+
+const startStep = 'welcome';
 const stepHasError = ref(true);
 const singUpType = ref('pf');
-const currentStep = ref(1);
+const currentStep = ref(startStep);
 const hasServerError = ref(false);
 const isRegistrationComplete = ref(false);
+const stepPointer = ref(0);
 const formState = reactive({
   email: {
     id: 'email',
@@ -102,32 +104,47 @@ const formState = reactive({
   },
 });
 const formErrors = reactive({});
-const isFirstStep = computed(() => currentStep.value === 1);
-const isLastStep = computed(() => currentStep.value === totalSteps);
+const stepsOrder = ref([startStep, singUpType.value, 'password', 'review']);
+const isFirstStep = computed(() => currentStep.value === startStep);
+const isLastStep = computed(() => currentStep.value === stepsOrder.value[stepsOrder.value.length - 1]);
+const currentStepInt = computed(() => stepPointer.value + 1);
+const totalSteps = computed(() => stepsOrder.value.length);
+
 const stepsForm = {
-  1: {
+  welcome: {
     title: 'Seja bem vindo(a)!',
     fields: ['email'],
   },
-  2: {
+  pf: {
     title: 'Pessoa Física',
     fields: ['name', 'cpf', 'birthDate', 'phone'],
   },
-  3: {
+  pj: {
+    title: 'Pessoa Jurídica',
+    fields: ['pjName', 'cnpj', 'pjPhone', 'startUpDate'],
+  },
+  password: {
     title: 'Senha de acesso',
     fields: ['password'],
   },
-  4: {
+  review: {
     title: 'Revise suas informações',
     field: [],
   },
 };
 
-const handleSingUpTypeChange = (e) => {
-  singUpType.value = e.target.value;
-  stepsForm[2].title = singUpType.value === 'pf' ? 'Pessoa Física' : 'Pessoa Jurídica';
-  stepsForm[2].fields =
-    singUpType.value === 'pf' ? ['name', 'cpf', 'birthDate', 'phone'] : ['pjName', 'cnpj', 'pjPhone', 'startUpDate'];
+const updateStepsOrder = (stepSlug = '', position = 0, replace = false) => {
+  if (stepSlug === '') return;
+
+  if (stepSlug !== '' && stepsOrder.value.indexOf(stepSlug) === -1) {
+    if (!replace) {
+      stepsOrder.value.splice(position, 0, stepSlug);
+      return;
+    }
+
+    stepsOrder.value[position] = stepSlug;
+    return;
+  }
 };
 
 const handleSubmit = async (e) => {
@@ -176,22 +193,37 @@ const validateStepFields = () => {
   return hasError;
 };
 
+const handleSingUpTypeChange = (e) => {
+  singUpType.value = e.target.value;
+  updateStepsOrder(singUpType.value, 1, true);
+};
+
 const handleNextStepNav = () => {
   validateStepFields();
 
-  if (!stepHasError.value) {
-    currentStep.value++;
+  if (!stepHasError.value && !isLastStep.value) {
+    stepPointer.value++;
+
+    const nextStep = stepsOrder.value[stepPointer.value];
+    if (!nextStep) return;
+    currentStep.value = nextStep;
+
     stepHasError.value = true;
   }
 };
 
 const handlePrevStepNav = () => {
-  currentStep.value--;
-
   if (isFirstStep.value) {
     resetFormErrors();
     return;
   }
+
+  stepPointer.value--;
+  const prevStep = stepsOrder.value[stepPointer.value];
+
+  if (!prevStep) return;
+
+  currentStep.value = prevStep;
 };
 
 const handleInputEnter = () => {
@@ -213,52 +245,49 @@ const resetFormErrors = () => {
   <div class="mb-signup-container">
     <div v-if="!isRegistrationComplete">
       <span class="mb-signup-step"
-        >Etapa <span class="mb-signup-step-current">{{ currentStep }}</span> de {{ totalSteps }}</span
+        >Etapa <span class="mb-signup-step-current">{{ currentStepInt }}</span> de {{ totalSteps }}</span
       >
       <form @submit.prevent="handleSubmit" class="mb-signup-form">
         <h2>{{ stepsForm[currentStep].title }}</h2>
-        <!-- Percorrer os steps -->
-        <div v-for="(step, key) in stepsForm" :key="step">
-          <!-- Se o passo atual for igual a key do step exibe os campos -->
-          <div class="mb-signup-step-form-container" v-if="currentStep === +key">
-            <FormStep
-              :form-state="formState"
-              :form-errors="formErrors"
-              :step-fields="stepsForm[currentStep].fields"
-              @enter="handleInputEnter" />
-            <!-- Exibe os campos de pessoa física ou jurídica no passo 1 -->
-            <div class="mb-signup-type-input" v-if="currentStep === 1">
-              <span>
-                <input
-                  id="pf"
-                  type="radio"
-                  :checked="singUpType === 'pf'"
-                  name="singUpType"
-                  value="pf"
-                  @change="handleSingUpTypeChange" />
-                <label for="pf">Pessoa Física</label>
-              </span>
-              <span>
-                <input
-                  id="pj"
-                  type="radio"
-                  :checked="singUpType === 'pj'"
-                  name="singUpType"
-                  value="pj"
-                  @change="handleSingUpTypeChange" />
-                <label for="pj">Pessoa Jurídica</label>
-              </span>
-            </div>
+        <div class="mb-signup-step-form-container" v-if="!isLastStep">
+          <FormStep
+            :form-state="formState"
+            :form-errors="formErrors"
+            :step-fields="stepsForm[currentStep].fields"
+            @enter="handleInputEnter" />
+          <!-- Exibe os campos de pessoa física ou jurídica no passo 1 -->
+          <div class="mb-signup-type-input" v-if="currentStep === startStep">
+            <span>
+              <input
+                id="pf"
+                type="radio"
+                :checked="singUpType === 'pf'"
+                name="singUpType"
+                value="pf"
+                @change="handleSingUpTypeChange" />
+              <label for="pf">Pessoa Física</label>
+            </span>
+            <span>
+              <input
+                id="pj"
+                type="radio"
+                :checked="singUpType === 'pj'"
+                name="singUpType"
+                value="pj"
+                @change="handleSingUpTypeChange" />
+              <label for="pj">Pessoa Jurídica</label>
+            </span>
           </div>
         </div>
 
         <!-- Review step -->
-        <div class="mb-signup-step-form-container" v-for="(step, key) in stepsForm" :key="step" v-if="isLastStep">
+        <div class="mb-signup-step-form-container" v-for="(step, key) in stepsOrder" :key="step" v-if="isLastStep">
           <!-- Percorrer os campos do step atual -->
           <FormStep
+            v-if="stepsForm[step].fields"
             :form-state="formState"
             :form-errors="formErrors"
-            :step-fields="stepsForm[key].fields"
+            :step-fields="stepsForm[step].fields"
             @enter="handleInputEnter" />
         </div>
 

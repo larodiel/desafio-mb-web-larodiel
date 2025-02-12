@@ -1,5 +1,5 @@
 <script setup>
-import {defineEmits, defineProps, onMounted, ref} from 'vue';
+import {defineProps, onMounted, ref} from 'vue';
 import {validationRules} from '../../../utils/signUpValidation';
 import Input from '../ui/Input.vue';
 
@@ -30,8 +30,8 @@ onMounted(() => {
 <template>
   <component
     :is="Input"
-    ref="inputRef"
     v-for="(field, index) in stepFields"
+    :ref="inputRef"
     :key="field"
     v-model="formState[field].value"
     :id="formState[field].id"
